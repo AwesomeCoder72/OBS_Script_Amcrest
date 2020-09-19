@@ -50,7 +50,7 @@ def add_to_dict(igmore1, ignore2):
         json_dict = json.load(jsonfile)
         
     
-    move_camera(json_dict[current_scene_collection][scene_name])
+    print(move_camera(json_dict[current_scene_collection][scene_name]))
     
     
 def del_from_dict(props, prop):
@@ -67,14 +67,8 @@ def del_from_dict(props, prop):
     except:
         pass        
     
-# def ignore_func(ignore1, ignore2):
-#     pass
-    
-
-# def add_but(ignore1, ignore2):
-#     global props
-#     obs.obs_properties_add_button(props, "new_but", "Button!", ignore_func)
-#     print('did it?')
+def script_description():
+	return "Automatically moves Amcrest camera to presets when changing scenes.\n\nBy Noah Nolte"
 
 def script_properties():
     global props
@@ -102,8 +96,7 @@ def script_properties():
     
     obs.obs_properties_add_button(props, "add", "Add Camera Preset Scene", add_to_dict)
      
-    # obs.obs_properties_add_button(props, "add_button", "Add Button.", add_but)
-    
+   
     return props
 
 def script_update(settings):
@@ -134,15 +127,17 @@ def move_camera(move_info):
         helpful_string = "Could not request from URL."
 
     elif move_request.status_code == 401:
-        helpful_string = "Invalid username and/or password."    
+        helpful_string = "Invalid username and/or password."
+    
+    else:
+        helpful_string = "That preset is not set!"
     
     return f"{helpful_string} {move_request}"
 
 
 def on_event(event):
     global current_scene_collection
-    # if event == obs.OBS_FRONTEND_EVENT_PREVIEW_SCENE_CHANGED:
-    #     print("Preview Scene changed!")
+
     try:
         with open(full_directory, 'r') as jsonfile:
             json_dict = json.load(jsonfile)
